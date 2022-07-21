@@ -45,26 +45,35 @@ namespace ConsoleNetworkFileTransfer_Server
 
                     // Получаем от клиента имя и размер файла
                     byte[] buffer = new byte[2048];/// Буфер в котором хранятся данные от Клиента
-                    int byteSize = networkStream.Read(buffer, 0, 2048);/// Получаем имя файла
+                    int byteSize = networkStream.Read(buffer, 0, buffer.Length);/// Получаем имя файла
                     string fileName = Encoding.UTF8.GetString(buffer, 0, byteSize);/// Преобразовать поток в строку
                     stream = new FileStream(PATH + fileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);/// Путь сохранения + имя файла, который отправил клиент
-                    byteSize = networkStream.Read(buffer, 0, 2048);/// Получаем размер файла
-                    long fileSize = Convert.ToInt64(Encoding.UTF8.GetString(buffer, 0, byteSize));
+                    byteSize = networkStream.Read(buffer, 0, buffer.Length);/// Получаем размер файла
+                    int fileSize = Convert.ToInt32(Encoding.UTF8.GetString(buffer, 0, byteSize));
 
-                    // Отправка ответа клиенту - статус (во избежание IOException)
+                    // Отправка ответа клиенту
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    byte[] status = Encoding.UTF8.GetBytes("Status - FileName And FileSize received".ToCharArray());
+                    byte[] status = Encoding.UTF8.GetBytes("Ответ сервера - Имя и размер файла получены.".ToCharArray());
                     networkStream.Write(status, 0, status.Length);
-                    Console.WriteLine("Отпрака ответа клиенту \n Status - FileName And FileSize received");
+                    Console.WriteLine("Отпрака ответа клиенту. - Имя и размер файла получены.");
 
                     // Получение файла
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"Получение файла {fileName} ({fileSize} байт)");
+                    int size = fileSize > buffer.Length ? buffer.Length : fileSize;
                     while ((byteSize = networkStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        stream.Write(buffer, 0, byteSize);/// Запись данных в локальный файловый поток
+                        int byteSizeFile = networkStream.Read(buffer, 0, size);
+                        fileSize -= byteSizeFile;
+                        stream.Write(buffer, 0, byteSizeFile);/// Запись данных в локальный файловый поток
                     }
                     Console.WriteLine("Файл получен!");
+
+                    // Отправка ответа клиенту 
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    status = Encoding.UTF8.GetBytes("Ответ сервера - файл получен.".ToCharArray());
+                    networkStream.Write(status, 0, status.Length);
+                    Console.WriteLine("Отпрака ответа клиенту. - файл получен.");
                 }
                 catch (Exception ex)
                 {

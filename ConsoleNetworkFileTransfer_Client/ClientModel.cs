@@ -56,10 +56,10 @@ namespace ConsoleNetworkFileTransfer_Client
 
                     // Ожидание получения ответа от сервера
                     byte[] buffer = new byte[2048];
-                    int byteSize = networkStream.Read(buffer, 0, 2048);
+                    int byteSize = networkStream.Read(buffer, 0, buffer.Length);
                     string status = Encoding.UTF8.GetString(buffer, 0, byteSize);
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine(status);/// - Имя и размер файла получены
+                    Console.WriteLine(status);/// - Имя и размер файла получены сервером
 
                     // Отправка файла на сервер
                     Console.ForegroundColor = ConsoleColor.Gray;
@@ -69,6 +69,12 @@ namespace ConsoleNetworkFileTransfer_Client
                         networkStream.Write(buffer, 0, byteSize);/// Запись данных в сетевой поток
                     }
                     Console.WriteLine("Файл отправлен!");
+
+                    // Ожидание получения ответа от сервера
+                    byteSize = networkStream.Read(buffer, 0, buffer.Length);
+                    status = Encoding.UTF8.GetString(buffer, 0, byteSize);
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine(status);/// - файл получен сервером
                 }
                 else
                 {
