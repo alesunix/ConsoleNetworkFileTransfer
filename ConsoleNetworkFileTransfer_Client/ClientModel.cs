@@ -39,10 +39,7 @@ namespace ConsoleNetworkFileTransfer_Client
                 Console.WriteLine("Отправка информации о файле");
                 // Получить поток подключенный к серверу
                 networkStream = tcpClient.GetStream();
-                byte[] byteSend = new byte[tcpClient.ReceiveBufferSize];
-                // Файловый поток будет считавыть байты из файла
                 fileStream = new FileStream(PATH, FileMode.Open, FileAccess.Read);               
-                BinaryReader binary = new BinaryReader(fileStream);// Прочитать файл как бинарный
                 FileInfo info = new FileInfo(PATH);// Получить информацию о файле
 
                 // Отправить серверу имя файла
@@ -67,7 +64,7 @@ namespace ConsoleNetworkFileTransfer_Client
                 Console.WriteLine($"Отправка файла {fileName} {fileSize} байт");
                 while ((byteSize = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    networkStream.Write(buffer, 0, byteSize);// Запись данных
+                    networkStream.Write(buffer, 0, byteSize);// Запись данных в сетевой поток
                 }
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Файл отправлен. Закрытие потоков и соединений!");

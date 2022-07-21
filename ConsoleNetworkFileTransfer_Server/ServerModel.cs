@@ -43,13 +43,13 @@ namespace ConsoleNetworkFileTransfer_Server
                     networkStream = tcpClient.GetStream();// Получить поток и сохранить его в networkStream
                     Console.WriteLine("Сервер получил поток");
 
+                    // Получаем от клиента имя и размер файла
                     int byteSize = 0;
                     byte[] buffer = new byte[2048];// Буфер в котором хранятся данные от Клиента
-                    byteSize = networkStream.Read(buffer, 0, 2048);// Представляет имя файла
+                    byteSize = networkStream.Read(buffer, 0, 2048);// Получаем имя файла
                     string fileName = Encoding.ASCII.GetString(buffer, 0, byteSize);// Преобразовать поток в строку и сохранить
                     stream = new FileStream(PATH + fileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);// Путь сохранения + имя файла, который отправил клиент
-
-                    byteSize = networkStream.Read(buffer, 0, 2048);// Представляет размер файла
+                    byteSize = networkStream.Read(buffer, 0, 2048);// Получаем размер файла
                     long fileSize = Convert.ToInt64(Encoding.ASCII.GetString(buffer, 0, byteSize));
 
                     // Отправка ответа клиенту - статус (во избежание IOException)
@@ -65,8 +65,7 @@ namespace ConsoleNetworkFileTransfer_Server
                     buffer = new byte[2048];
                     while ((byteSize = networkStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        // Запись данных в локальный файловый поток
-                        stream.Write(buffer, 0, byteSize);
+                        stream.Write(buffer, 0, byteSize);// Запись данных в локальный файловый поток
                     }
                 }
                 catch (Exception ex)
