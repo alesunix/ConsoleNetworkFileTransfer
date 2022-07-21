@@ -40,17 +40,17 @@ namespace ConsoleNetworkFileTransfer_Client
                 // Получить поток подключенный к серверу
                 networkStream = tcpClient.GetStream();
                 fileStream = new FileStream(PATH, FileMode.Open, FileAccess.Read);               
-                FileInfo info = new FileInfo(PATH);// Получить информацию о файле
+                FileInfo info = new FileInfo(PATH);/// Получить информацию о файле
 
                 // Отправить серверу имя файла
                 string fileName = info.Name;
                 byte[] byteFileName = Encoding.ASCII.GetBytes(fileName.ToCharArray());
-                networkStream.Write(byteFileName, 0, byteFileName.Length);// Записать имя файла в сетевой поток
+                networkStream.Write(byteFileName, 0, byteFileName.Length);/// Записать имя файла в сетевой поток
 
                 // Отправить серверу размер файла
                 long fileSize = info.Length;
                 byte[] byteFileSize = Encoding.ASCII.GetBytes(fileSize.ToString().ToCharArray());               
-                networkStream.Write(byteFileSize, 0, byteFileSize.Length);// Записать размер файла в сетевой поток
+                networkStream.Write(byteFileSize, 0, byteFileSize.Length);/// Записать размер файла в сетевой поток
 
                 // Ожидание получения ответа от сервера
                 byte[] buffer = new byte[2048];
@@ -64,7 +64,7 @@ namespace ConsoleNetworkFileTransfer_Client
                 Console.WriteLine($"Отправка файла {fileName} {fileSize} байт");
                 while ((byteSize = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    networkStream.Write(buffer, 0, byteSize);// Запись данных в сетевой поток
+                    networkStream.Write(buffer, 0, byteSize);/// Запись данных в сетевой поток
                 }
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Файл отправлен. Закрытие потоков и соединений!");
