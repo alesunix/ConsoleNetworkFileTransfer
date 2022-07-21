@@ -38,7 +38,7 @@ namespace ConsoleNetworkFileTransfer_Server
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Сервер запущен. Пожалуйста подключите клиент к {ipAdress}:{serverPort}");
                     TcpClient tcpClient = tcpListener.AcceptTcpClient();// Принять соединение
-                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("Сервер принял клиента");
                     networkStream = tcpClient.GetStream();// Получить поток и сохранить его в networkStream
                     Console.WriteLine("Сервер получил поток");
