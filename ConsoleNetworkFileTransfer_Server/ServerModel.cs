@@ -49,7 +49,6 @@ namespace ConsoleNetworkFileTransfer_Server
                     string fileName = Encoding.ASCII.GetString(buffer, 0, byteSize);// Преобразовать поток в строку и сохранить
                     stream = new FileStream(PATH + fileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);// Путь сохранения + имя файла, который отправил клиент
 
-                    buffer = new byte[2048];
                     byteSize = networkStream.Read(buffer, 0, 2048);// Представляет размер файла
                     long fileSize = Convert.ToInt64(Encoding.ASCII.GetString(buffer, 0, byteSize));
 

@@ -41,25 +41,19 @@ namespace ConsoleNetworkFileTransfer_Client
                 networkStream = tcpClient.GetStream();
                 byte[] byteSend = new byte[tcpClient.ReceiveBufferSize];
                 // Файловый поток будет считавыть байты из файла
-                fileStream = new FileStream(PATH, FileMode.Open, FileAccess.Read);
-                // Прочитать файл как бинарный
-                BinaryReader binary = new BinaryReader(fileStream);
-                // Получить информацию о файле
-                FileInfo info = new FileInfo(PATH);
+                fileStream = new FileStream(PATH, FileMode.Open, FileAccess.Read);               
+                BinaryReader binary = new BinaryReader(fileStream);// Прочитать файл как бинарный
+                FileInfo info = new FileInfo(PATH);// Получить информацию о файле
 
-                // Получить и сохранить имя файла
+                // Отправить серверу имя файла
                 string fileName = info.Name;
-                byte[] byteFileName = new byte[2048];
-                byteFileName = Encoding.ASCII.GetBytes(fileName.ToCharArray());
-                // Записать имя файла в сетевой поток
-                networkStream.Write(byteFileName, 0, byteFileName.Length);
+                byte[] byteFileName = Encoding.ASCII.GetBytes(fileName.ToCharArray());
+                networkStream.Write(byteFileName, 0, byteFileName.Length);// Записать имя файла в сетевой поток
 
-                // Получить и сохранить размер файла
+                // Отправить серверу размер файла
                 long fileSize = info.Length;
-                byte[] byteFileSize = new byte[2048];
-                byteFileSize = Encoding.ASCII.GetBytes(fileSize.ToString().ToCharArray());
-                // Записать в сетевой поток
-                networkStream.Write(byteFileSize, 0, byteFileSize.Length);
+                byte[] byteFileSize = Encoding.ASCII.GetBytes(fileSize.ToString().ToCharArray());               
+                networkStream.Write(byteFileSize, 0, byteFileSize.Length);// Записать размер файла в сетевой поток
 
                 // Ожидание получения ответа от сервера
                 byte[] buffer = new byte[2048];
@@ -71,13 +65,9 @@ namespace ConsoleNetworkFileTransfer_Client
                 // Отправка файла на сервер
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine($"Отправка файла {fileName} {fileSize} байт");
-                // Сбросить количество прочитанных байтов
-                byteSize = 0;
-                buffer = new byte[2048];
                 while ((byteSize = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    // Запись данных
-                    networkStream.Write(buffer, 0, byteSize);
+                    networkStream.Write(buffer, 0, byteSize);// Запись данных
                 }
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Файл отправлен. Закрытие потоков и соединений!");
