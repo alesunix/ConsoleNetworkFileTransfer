@@ -40,23 +40,22 @@ namespace ConsoleNetworkFileTransfer_Server
                     TcpClient tcpClient = tcpListener.AcceptTcpClient();/// Принять соединение
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("Сервер принял клиента");
-                    networkStream = tcpClient.GetStream();// Получить поток и сохранить его в networkStream
+                    networkStream = tcpClient.GetStream();/// Получить поток и сохранить его в networkStream
                     Console.WriteLine("Сервер получил поток");
 
                     // Получаем от клиента имя и размер файла
-                    int byteSize = 0;
                     byte[] buffer = new byte[2048];/// Буфер в котором хранятся данные от Клиента
-                    byteSize = networkStream.Read(buffer, 0, 2048);/// Получаем имя файла
-                    string fileName = Encoding.ASCII.GetString(buffer, 0, byteSize);/// Преобразовать поток в строку
+                    int byteSize = networkStream.Read(buffer, 0, 2048);/// Получаем имя файла
+                    string fileName = Encoding.UTF8.GetString(buffer, 0, byteSize);/// Преобразовать поток в строку
                     stream = new FileStream(PATH + fileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);/// Путь сохранения + имя файла, который отправил клиент
                     byteSize = networkStream.Read(buffer, 0, 2048);/// Получаем размер файла
-                    long fileSize = Convert.ToInt64(Encoding.ASCII.GetString(buffer, 0, byteSize));
+                    long fileSize = Convert.ToInt64(Encoding.UTF8.GetString(buffer, 0, byteSize));
 
                     // Отправка ответа клиенту - статус (во избежание IOException)
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    byte[] status = Encoding.ASCII.GetBytes("Status-Ok".ToCharArray());
+                    byte[] status = Encoding.UTF8.GetBytes("Status - FileName And FileSize received".ToCharArray());
                     networkStream.Write(status, 0, status.Length);
-                    Console.WriteLine("Отпрака ответа клиенту");
+                    Console.WriteLine("Отпрака ответа клиенту \n Status - FileName And FileSize received");
 
                     // Получение файла
                     Console.ForegroundColor = ConsoleColor.Gray;
@@ -65,6 +64,7 @@ namespace ConsoleNetworkFileTransfer_Server
                     {
                         stream.Write(buffer, 0, byteSize);/// Запись данных в локальный файловый поток
                     }
+                    Console.WriteLine("Файл получен!");
                 }
                 catch (Exception ex)
                 {
@@ -74,14 +74,13 @@ namespace ConsoleNetworkFileTransfer_Server
                 finally
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Файл получен, закрытие потоков.");
+                    Console.WriteLine("Закрытие потоков.");
                     stream.Close();
                     networkStream.Close();
-                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Потоки закрыты.");
                 }
             }
-            
+
         }
     }
 }

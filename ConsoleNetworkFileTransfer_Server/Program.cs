@@ -3,3 +3,4 @@ using ConsoleNetworkFileTransfer_Server;
 
 ServerModel serverModel = new ServerModel();
 serverModel.StartReceiving();
+Console.ReadLine();
