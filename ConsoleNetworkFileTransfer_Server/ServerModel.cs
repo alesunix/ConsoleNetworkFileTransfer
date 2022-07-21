@@ -61,8 +61,6 @@ namespace ConsoleNetworkFileTransfer_Server
                     // Получение файла
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"Получение файла {fileName} ({fileSize} байт)");
-                    // Размер буфера для приема файла
-                    buffer = new byte[2048];
                     while ((byteSize = networkStream.Read(buffer, 0, buffer.Length)) > 0)
                     {
                         stream.Write(buffer, 0, byteSize);// Запись данных в локальный файловый поток
