@@ -60,17 +60,24 @@ namespace ConsoleNetworkFileTransfer_Client
                 byteFileSize = Encoding.ASCII.GetBytes(fileSize.ToString().ToCharArray());
                 // Записать в сетевой поток
                 networkStream.Write(byteFileSize, 0, byteFileSize.Length);
+
+                // Ожидание получения ответа от сервера
+                byte[] buffer = new byte[2048];
+                int byteSize = networkStream.Read(buffer, 0, 2048);
+                string status = Encoding.ASCII.GetString(buffer, 0, byteSize);
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(status);
+
+                // Отправка файла на сервер
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine($"Отправка файла {fileName} {fileSize} байт");
-
                 // Сбросить количество прочитанных байтов
-                int bytesSize = 0;
-                byte[] buffer = new byte[2048];
-
-                while ((bytesSize = fileStream.Read(buffer, 0, buffer.Length)) > 0)
+                byteSize = 0;
+                buffer = new byte[2048];
+                while ((byteSize = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                 {
                     // Запись данных
-                    networkStream.Write(buffer, 0, bytesSize);
+                    networkStream.Write(buffer, 0, byteSize);
                 }
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Файл отправлен. Закрытие потоков и соединений!");

@@ -52,8 +52,16 @@ namespace ConsoleNetworkFileTransfer_Server
                     buffer = new byte[2048];
                     byteSize = networkStream.Read(buffer, 0, 2048);// Представляет размер файла
                     long fileSize = Convert.ToInt64(Encoding.ASCII.GetString(buffer, 0, byteSize));
-                    Console.WriteLine($"Получение файла {fileName} ({fileSize} байт)");
 
+                    // Отправка ответа клиенту - статус (во избежание IOException)
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    byte[] status = Encoding.ASCII.GetBytes("Status-Ok".ToCharArray());
+                    networkStream.Write(status, 0, status.Length);
+                    Console.WriteLine("Отпрака ответа клиенту");
+
+                    // Получение файла
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine($"Получение файла {fileName} ({fileSize} байт)");
                     // Размер буфера для приема файла
                     buffer = new byte[2048];
                     while ((byteSize = networkStream.Read(buffer, 0, buffer.Length)) > 0)
