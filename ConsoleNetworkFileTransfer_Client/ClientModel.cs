@@ -70,10 +70,6 @@ namespace ConsoleNetworkFileTransfer_Client
 
                     WaitResponseFromServer();// Ожидание получения ответа от сервера /// - (файл получен сервером)
                 }
-                else
-                {
-                    ConnectToServer(serverIP, serverPort);
-                }
             }
             catch(Exception ex)
             {
@@ -95,7 +91,7 @@ namespace ConsoleNetworkFileTransfer_Client
             byteSize = networkStream.Read(buffer, 0, buffer.Length);
             status = Encoding.UTF8.GetString(buffer, 0, byteSize);
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(status);/// - (файл получен сервером)
+            Console.WriteLine(status);/// - данные получены сервером
         }
     }
 }
