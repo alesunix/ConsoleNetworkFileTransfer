@@ -54,7 +54,7 @@ namespace ConsoleNetworkFileTransfer_Server
                     byteSize = networkStream.Read(buffer, 0, buffer.Length);/// Получаем размер файла
                     int fileSize = Convert.ToInt32(Encoding.UTF8.GetString(buffer, 0, byteSize));
 
-                    SendResponseToClient();// Отправка ответа клиенту 
+                    Console.WriteLine(SendResponseToClient());// Отправка ответа клиенту 
 
                     // Получение файла
                     Console.ForegroundColor = ConsoleColor.Gray;
@@ -67,8 +67,7 @@ namespace ConsoleNetworkFileTransfer_Server
                         stream.Write(buffer, 0, byteSize);/// Запись данных в локальный файловый поток
                     }
                     Console.WriteLine("Файл получен!");
-
-                    SendResponseToClient();// Отправка ответа клиенту 
+                    Console.WriteLine(SendResponseToClient());// Отправка ответа клиенту 
                 }
                 catch (Exception ex)
                 {
@@ -85,12 +84,12 @@ namespace ConsoleNetworkFileTransfer_Server
                 }
             }
         }
-        private void SendResponseToClient()// Отправка ответа клиенту 
+        private string SendResponseToClient()// Отправка ответа клиенту 
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             status = Encoding.UTF8.GetBytes("Ответ сервера - данные получены.".ToCharArray());
             networkStream.Write(status, 0, status.Length);
-            Console.WriteLine("Отпрака ответа клиенту о том, что данные получены.");
+            return "Отпрака ответа клиенту о том, что данные получены.";
         }
     }
 }

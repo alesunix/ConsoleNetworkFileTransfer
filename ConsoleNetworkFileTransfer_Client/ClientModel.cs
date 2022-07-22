@@ -57,7 +57,7 @@ namespace ConsoleNetworkFileTransfer_Client
                     byte[] byteFileSize = Encoding.UTF8.GetBytes(fileSize.ToString().ToCharArray());
                     networkStream.Write(byteFileSize, 0, byteFileSize.Length);/// Записать размер файла в сетевой поток
 
-                    WaitResponseFromServer();// Ожидание получения ответа от сервера /// - (Имя и размер файла получены сервером)
+                    Console.WriteLine(WaitResponseFromServer());// Ожидание получения ответа от сервера /// - (Имя и размер файла получены сервером)
 
                     // Отправка файла на сервер
                     Console.ForegroundColor = ConsoleColor.Gray;
@@ -67,8 +67,7 @@ namespace ConsoleNetworkFileTransfer_Client
                         networkStream.Write(buffer, 0, byteSize);/// Запись данных в сетевой поток
                     }
                     Console.WriteLine("Файл отправлен!");
-
-                    WaitResponseFromServer();// Ожидание получения ответа от сервера /// - (файл получен сервером)
+                    Console.WriteLine(WaitResponseFromServer());// Ожидание получения ответа от сервера /// - (файл получен сервером)
                 }
             }
             catch(Exception ex)
@@ -86,12 +85,12 @@ namespace ConsoleNetworkFileTransfer_Client
                 Console.WriteLine("Потоки и соединения закрыты.");
             }
         }
-        private void WaitResponseFromServer()// Ожидание получения ответа от сервера
+        private string WaitResponseFromServer()// Ожидание получения ответа от сервера
         {
             byteSize = networkStream.Read(buffer, 0, buffer.Length);
             status = Encoding.UTF8.GetString(buffer, 0, byteSize);
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(status);/// - данные получены сервером
+            return status;/// - данные получены сервером
         }
     }
 }
