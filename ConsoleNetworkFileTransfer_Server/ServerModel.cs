@@ -16,6 +16,7 @@ namespace ConsoleNetworkFileTransfer_Server
         private NetworkStream networkStream;
         // Слушатель TCP, который будет прослушивать подключения 
         private TcpListener tcpListener;
+        byte[] status;
         public string Ip { get; set; }
         public int Port { get; set; }
         const string PATH = @"C:\Test\";
@@ -53,11 +54,7 @@ namespace ConsoleNetworkFileTransfer_Server
                     byteSize = networkStream.Read(buffer, 0, buffer.Length);/// Получаем размер файла
                     int fileSize = Convert.ToInt32(Encoding.UTF8.GetString(buffer, 0, byteSize));
 
-                    // Отправка ответа клиенту
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    byte[] status = Encoding.UTF8.GetBytes("Ответ сервера - Имя и размер файла получены.".ToCharArray());
-                    networkStream.Write(status, 0, status.Length);
-                    Console.WriteLine("Отпрака ответа клиенту. - Имя и размер файла получены.");
+                    SendResponseToClient();// Отправка ответа клиенту 
 
                     // Получение файла
                     Console.ForegroundColor = ConsoleColor.Gray;
@@ -71,11 +68,7 @@ namespace ConsoleNetworkFileTransfer_Server
                     }
                     Console.WriteLine("Файл получен!");
 
-                    // Отправка ответа клиенту 
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    status = Encoding.UTF8.GetBytes("Ответ сервера - файл получен.".ToCharArray());
-                    networkStream.Write(status, 0, status.Length);
-                    Console.WriteLine("Отпрака ответа клиенту. - файл получен.");
+                    SendResponseToClient();// Отправка ответа клиенту 
                 }
                 catch (Exception ex)
                 {
@@ -84,14 +77,20 @@ namespace ConsoleNetworkFileTransfer_Server
                 }
                 finally
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("Закрытие потоков.");
                     stream.Close();
                     networkStream.Close();
                     Console.WriteLine("Потоки закрыты.");
                 }
             }
-
+        }
+        private void SendResponseToClient()// Отправка ответа клиенту 
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            status = Encoding.UTF8.GetBytes("Ответ сервера - данные получены.".ToCharArray());
+            networkStream.Write(status, 0, status.Length);
+            Console.WriteLine("Отпрака ответа клиенту о том, что данные получены.");
         }
     }
 }

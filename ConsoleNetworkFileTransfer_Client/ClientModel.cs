@@ -82,7 +82,7 @@ namespace ConsoleNetworkFileTransfer_Client
             }
             finally
             {
-                Console.ForegroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("Закрытие потоков и соединений.");
                 tcpClient.Close();
                 networkStream.Close();
