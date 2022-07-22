@@ -16,6 +16,8 @@ namespace ConsoleNetworkFileTransfer_Server
         private NetworkStream networkStream;
         // Слушатель TCP, который будет прослушивать подключения 
         private TcpListener tcpListener;
+        public string Ip { get; set; }
+        public int Port { get; set; }
         const string PATH = @"C:\Test\";
         public void StartReceiving()
         {
@@ -38,7 +40,7 @@ namespace ConsoleNetworkFileTransfer_Server
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Сервер запущен. Пожалуйста подключите клиент к {ipAdress}:{serverPort}");
                     TcpClient tcpClient = tcpListener.AcceptTcpClient();/// Принять соединение
-                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Сервер принял клиента");
                     networkStream = tcpClient.GetStream();/// Получить поток и сохранить его в networkStream
                     Console.WriteLine("Сервер получил поток");
@@ -82,7 +84,7 @@ namespace ConsoleNetworkFileTransfer_Server
                 }
                 finally
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Закрытие потоков.");
                     stream.Close();
                     networkStream.Close();

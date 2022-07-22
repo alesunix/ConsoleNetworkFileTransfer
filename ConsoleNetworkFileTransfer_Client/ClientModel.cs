@@ -15,6 +15,9 @@ namespace ConsoleNetworkFileTransfer_Client
         public string serverIP = "192.168.1.111";
         public int serverPort = 815;
         const string PATH = @"C:\iis.png";
+        byte[] buffer = new byte[2048];
+        int byteSize = 0;
+        string status = string.Empty;
         public void ConnectToServer(string serverIP, int serverPort)
         {
             tcpClient = new TcpClient();
@@ -54,12 +57,7 @@ namespace ConsoleNetworkFileTransfer_Client
                     byte[] byteFileSize = Encoding.UTF8.GetBytes(fileSize.ToString().ToCharArray());
                     networkStream.Write(byteFileSize, 0, byteFileSize.Length);/// Записать размер файла в сетевой поток
 
-                    // Ожидание получения ответа от сервера
-                    byte[] buffer = new byte[2048];
-                    int byteSize = networkStream.Read(buffer, 0, buffer.Length);
-                    string status = Encoding.UTF8.GetString(buffer, 0, byteSize);
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine(status);/// - Имя и размер файла получены сервером
+                    WaitResponseFromServer();// Ожидание получения ответа от сервера /// - (Имя и размер файла получены сервером)
 
                     // Отправка файла на сервер
                     Console.ForegroundColor = ConsoleColor.Gray;
@@ -70,11 +68,7 @@ namespace ConsoleNetworkFileTransfer_Client
                     }
                     Console.WriteLine("Файл отправлен!");
 
-                    // Ожидание получения ответа от сервера
-                    byteSize = networkStream.Read(buffer, 0, buffer.Length);
-                    status = Encoding.UTF8.GetString(buffer, 0, byteSize);
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine(status);/// - файл получен сервером
+                    WaitResponseFromServer();// Ожидание получения ответа от сервера /// - (файл получен сервером)
                 }
                 else
                 {
@@ -88,14 +82,20 @@ namespace ConsoleNetworkFileTransfer_Client
             }
             finally
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Закрытие потоков и соединений.");
                 tcpClient.Close();
                 networkStream.Close();
                 fileStream.Close();
                 Console.WriteLine("Потоки и соединения закрыты.");
             }
-            
+        }
+        private void WaitResponseFromServer()// Ожидание получения ответа от сервера
+        {
+            byteSize = networkStream.Read(buffer, 0, buffer.Length);
+            status = Encoding.UTF8.GetString(buffer, 0, byteSize);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(status);/// - (файл получен сервером)
         }
     }
 }
