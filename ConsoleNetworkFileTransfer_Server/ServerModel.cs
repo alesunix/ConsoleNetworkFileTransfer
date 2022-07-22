@@ -61,11 +61,11 @@ namespace ConsoleNetworkFileTransfer_Server
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"Получение файла {fileName} ({fileSize} байт)");
                     int size = fileSize > buffer.Length ? buffer.Length : fileSize;
-                    while ((byteSize = networkStream.Read(buffer, 0, buffer.Length)) > 0)
+                    while (fileSize > 0)
                     {
-                        int byteSizeFile = networkStream.Read(buffer, 0, size);
-                        fileSize -= byteSizeFile;
-                        stream.Write(buffer, 0, byteSizeFile);/// Запись данных в локальный файловый поток
+                        byteSize = networkStream.Read(buffer, 0, size);
+                        fileSize -= byteSize;
+                        stream.Write(buffer, 0, byteSize);/// Запись данных в локальный файловый поток
                     }
                     Console.WriteLine("Файл получен!");
 
