@@ -85,10 +85,10 @@ namespace ConsoleNetworkFileTransfer_Server
             }
         }
         private string SendResponseToClient()// Отправка ответа клиенту 
-        {
-            Console.ForegroundColor = ConsoleColor.Cyan;
+        { 
             status = Encoding.UTF8.GetBytes("Ответ сервера - данные получены.".ToCharArray());
             networkStream.Write(status, 0, status.Length);
+            Console.ForegroundColor = ConsoleColor.Cyan;
             return "Отпрака ответа клиенту о том, что данные получены.";
         }
     }
