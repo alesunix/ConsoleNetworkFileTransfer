@@ -32,8 +32,7 @@ namespace ConsoleNetworkFileTransfer_Server
                     IPAddress ipAdress = Dns.GetHostEntry(hostServer).AddressList[1];
                     if (tcpListener == null)
                     {
-                        // Создать обьект прослушивания TCP
-                        tcpListener = new TcpListener(ipAdress, serverPort);
+                        tcpListener = new TcpListener(ipAdress, serverPort);// Создать обьект прослушивания TCP
                     }
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine("Запуск сервера...");
@@ -54,7 +53,8 @@ namespace ConsoleNetworkFileTransfer_Server
                     byteSize = networkStream.Read(buffer, 0, buffer.Length);/// Получаем размер файла
                     int fileSize = Convert.ToInt32(Encoding.UTF8.GetString(buffer, 0, byteSize));
 
-                    Console.WriteLine(SendResponseToClient());// Отправка ответа клиенту 
+                    // Отправка ответа клиенту 
+                    Console.WriteLine(SendResponseToClient());
 
                     // Получение файла
                     Console.ForegroundColor = ConsoleColor.Gray;
@@ -67,7 +67,8 @@ namespace ConsoleNetworkFileTransfer_Server
                         stream.Write(buffer, 0, byteSize);/// Запись данных в локальный файловый поток
                     }
                     Console.WriteLine("Файл получен!");
-                    Console.WriteLine(SendResponseToClient());// Отправка ответа клиенту 
+                    // Отправка ответа клиенту 
+                    Console.WriteLine(SendResponseToClient());
                 }
                 catch (Exception ex)
                 {
